@@ -22,13 +22,13 @@ const rl = readline.createInterface({
 const mainCmd = (cb?: (s: any) => void) => {
   rl.question('\nclient > ', line => {
     const { action, options } = cmdParser(line);
-    let client = undefined;
-    const target = options[0];
-    if (!client) client = net.connect(PORT, target);
-    cmdAction(client, action, ...options);
 
-    rl.emit('line');
-    return cb && cb(line);
+    const target = options[0];
+    const client = net.connect(PORT, target).on('connect', () => {
+      cmdAction(client, action, ...options);
+      rl.emit('line');
+      return cb && cb(line);
+    });
   });
 };
 
