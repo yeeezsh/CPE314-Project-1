@@ -11,6 +11,7 @@ server.on('connection', socket => {
   server.getConnections((err, n) => {
     console.log('number of connection', n);
   });
+
   socket.on('connect', () =>
     console.log(
       'client',
@@ -24,6 +25,13 @@ server.on('connection', socket => {
     //   socket
     // console.log(socket.);
     console.log('on data', data.toString());
+  });
+
+  socket.on('close', () => {
+    console.log('client on close', socket.address()),
+      server.getConnections((err, n) => {
+        console.log('number of connection after close', n);
+      });
   });
   // console.log('on connection', socket.on('connect'))
 });
