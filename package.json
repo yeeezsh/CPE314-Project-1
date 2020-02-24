@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "start:server": "nodemon --config ./nodemon.server.json",
+    "start:client": "nodemon --config ./nodemon.client.json"
   },
   "author": "",
   "license": "ISC",
