@@ -1,7 +1,7 @@
 console.log('server ja');
 import net = require('net');
 
-const PORT = 8080;
+const PORT = 5000;
 
 const server = net.createServer();
 
@@ -24,6 +24,7 @@ server.on('connection', socket => {
   socket.on('data', data => {
     //   socket
     // console.log(socket.);
+    console.log(socket.remoteAddress);
     console.log('on data', data.toString());
   });
 
