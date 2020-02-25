@@ -5,8 +5,13 @@ import readline = require('readline');
 import cmdParser from './cmd.parser';
 import cmdAction from './cmd.action';
 
-const IPv4 = os.networkInterfaces()['en0'].filter(e => e.family === 'IPv4')[0]
-  .address;
+const networkInterfaces = os.networkInterfaces();
+const selectedInterface = Object.keys(networkInterfaces).find(key =>
+  networkInterfaces[key].some(({ internal }) => !internal),
+);
+const IPv4 = networkInterfaces[selectedInterface].filter(
+  e => e.family === 'IPv4',
+)[0].address;
 console.log('Hostname :', os.hostname());
 console.log('Local IP :', IPv4, '\n');
 
