@@ -6,14 +6,17 @@ import cmdParser from './cmd.parser';
 import cmdAction from './cmd.action';
 
 const networkInterfaces = os.networkInterfaces();
-const selectedInterface = Object.keys(networkInterfaces).find(key =>
-  networkInterfaces[key].some(({ internal }) => !internal),
-);
-const IPv4 = networkInterfaces[selectedInterface].filter(
-  e => e.family === 'IPv4',
-)[0].address;
+const addresses = Object.keys(networkInterfaces)
+  .map(el =>
+    networkInterfaces[el].find(
+      ({ family, internal }) => !internal && family === 'IPv4',
+    ),
+  )
+  .filter(el => el)
+  .map(({ address }) => address)
+  .join(', ');
 console.log('Hostname :', os.hostname());
-console.log('Local IP :', IPv4, '\n');
+console.log('Local IP :', addresses, '\n');
 
 const END_POINT = '127.0.0.1';
 export const PORT = 5000;
