@@ -1,5 +1,6 @@
 console.log('server ja');
 import net = require('net');
+import { SocketData } from './data.parser';
 
 const PORT = 5000;
 const HOST = '0.0.0.0';
@@ -28,7 +29,9 @@ server.on('connection', socket => {
     //   socket
     // console.log(socket.);
     console.log(socket.remoteAddress);
-    console.log('on data', data.toString());
+    const test = new SocketData('publish ' + data.toString());
+    console.log('on data', test.getMessage());
+    console.log('topic:', test.getTopic());
   });
 
   socket.on('close', () => {
