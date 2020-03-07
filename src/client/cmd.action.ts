@@ -15,15 +15,14 @@ export default async (
 
   console.log('resting param', options);
 
+  // check target is already subsrcibe before sending topic/msg
   const alreadySocket = brokerSubsrcibe.exist(target);
+  // console.log('already exist', alreadySocket);
+  const socket =
+    (brokerSubsrcibe.getByIp(target) && brokerSubsrcibe.getByIp(target).s) ||
+    (await connectToBroker(port, target));
   switch (action) {
     case 'publish':
-      // check target is already subsrcibe before sending topic/msg
-      const socket =
-        (brokerSubsrcibe.getByIp(target) &&
-          brokerSubsrcibe.getByIp(target).s) ||
-        (await connectToBroker(port, target));
-
       console.log('connected to ', target);
       console.log('establish connection');
       socket.write(topic + ' ' + msg);
@@ -35,11 +34,13 @@ export default async (
       return;
     case 'subscribe':
       if (!alreadySocket) {
-        const socket = await connectToBroker(port, target);
         brokerSubsrcibe.addSub(target, socket);
         console.log('add new socket');
       }
-      console.log('already socket', alreadySocket);
+
+      socket.write(topic + ' ' + msg);
+
+      // console.log('already socket', alreadySocket);
       console.log('subscribe action');
       return;
 
