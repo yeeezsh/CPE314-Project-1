@@ -1,4 +1,4 @@
-console.log('server ja');
+console.log('Broker server starting...');
 import net = require('net');
 import { SocketData } from './data.parser';
 import Subscriber from './subscriber';
