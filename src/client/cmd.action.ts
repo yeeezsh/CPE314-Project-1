@@ -1,5 +1,5 @@
 import * as net from 'net';
-import { connectToBroker } from './socket.utility';
+import { connectToBroker, brokerSubsrcibe } from './socket.utility';
 
 const ON_SUB = false;
 const MAX_RETRY = 3;
@@ -17,7 +17,12 @@ export default async (
 
   switch (action) {
     case 'publish':
-      const socket = await connectToBroker(port, target);
+      // check target is already subsrcibe before sending topic/msg
+      const socket =
+        (brokerSubsrcibe.getByIp(target) &&
+          brokerSubsrcibe.getByIp(target).s) ||
+        (await connectToBroker(port, target));
+
       console.log('connected to ', target);
       console.log('establish connection');
       socket.write(topic + ' ' + msg);
