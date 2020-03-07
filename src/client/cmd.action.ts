@@ -15,6 +15,7 @@ export default async (
 
   console.log('resting param', options);
 
+  const alreadySocket = brokerSubsrcibe.exist(target);
   switch (action) {
     case 'publish':
       // check target is already subsrcibe before sending topic/msg
@@ -26,11 +27,19 @@ export default async (
       console.log('connected to ', target);
       console.log('establish connection');
       socket.write(topic + ' ' + msg);
-      socket.end();
-      console.log('close connection');
+      if (!alreadySocket) {
+        console.log('close connection');
+        return socket.end();
+      }
 
       return;
     case 'subscribe':
+      if (!alreadySocket) {
+        const socket = await connectToBroker(port, target);
+        brokerSubsrcibe.addSub(target, socket);
+        console.log('add new socket');
+      }
+      console.log('already socket', alreadySocket);
       console.log('subscribe action');
       return;
 
