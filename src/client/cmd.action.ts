@@ -25,7 +25,7 @@ export default async (
     case 'publish':
       console.log('connected to ', target);
       console.log('establish connection');
-      socket.write(topic + ' ' + msg);
+      socket.write(action + ' ' + topic + ' ' + msg);
       if (!alreadySocket) {
         console.log('close connection');
         return socket.end();
@@ -38,7 +38,7 @@ export default async (
         console.log('add new socket');
       }
 
-      socket.write(topic + ' ' + msg);
+      socket.write(action + ' ' + topic);
 
       // console.log('already socket', alreadySocket);
       console.log('subscribe action');

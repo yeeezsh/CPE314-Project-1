@@ -1,6 +1,7 @@
 console.log('server ja');
 import net = require('net');
 import { SocketData } from './data.parser';
+import Subscriber from './subscriber';
 
 const PORT = 5000;
 const HOST = '0.0.0.0';
@@ -29,9 +30,21 @@ server.on('connection', socket => {
     //   socket
     // console.log(socket.);
     console.log(socket.remoteAddress);
-    const test = new SocketData('publish ' + data.toString());
-    console.log('on data', test.getMessage());
-    console.log('topic:', test.getTopic());
+    const parsed = new SocketData(data.toString());
+    /* quick handle */
+    switch (parsed.getAction()) {
+      case 'publish':
+        Subscriber.publish(parsed.getTopic(), parsed.getMessage());
+        break;
+      case 'subscribe':
+        new Subscriber(parsed.getTopic(), socket);
+        break;
+      default:
+        console.error('unrecognized action:', parsed.getAction());
+    }
+
+    console.log('on data', parsed.getMessage());
+    console.log('topic:', parsed.getTopic());
   });
 
   socket.on('close', () => {
