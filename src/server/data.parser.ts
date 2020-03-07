@@ -5,7 +5,7 @@ export class SocketData {
 
   constructor(data: string) {
     try {
-      const parsed = /^(\S+) \'(\S+)\'( +\'(.+)\')?/.exec(data);
+      const parsed = /^(\S+)\s+\'(\S+)\'(\s+\'(.+)\')?/.exec(data);
       this.action = parsed[1];
       this.topic = parsed[2];
       this.msg = parsed[4];
