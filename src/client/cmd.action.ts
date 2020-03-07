@@ -1,55 +1,45 @@
-import { Socket } from 'net';
-import { PORT } from '.';
+import * as net from 'net';
+import { connectToBroker, brokerSubsrcibe } from './socket.utility';
 
 const ON_SUB = false;
 const MAX_RETRY = 3;
 export type ActionType = 'publish' | 'subscribe' | string;
-export default (socket: Socket, s: ActionType, ...options: string[]) => {
-  let currentRetry = 0;
-  const targetIp = options[0];
-
-  // socket.setTimeout(2000);
-  // socket.on('close', () => console.log('on close'));
-
-  // socket.on('error', err => {
-  //   console.log('connecting...');
-  //   // setTimeout(() => {
-  //   //   currentRetry++;
-  //   //   socket.connect(PORT, targetIp, );
-  //   //   if (currentRetry > MAX_RETRY) {
-  //   //     socket.end();
-  //   //     throw `cannot connect to ${targetIp}`;
-  //   //   }
-  //   // }, 1000);
-  // });
-
-  // socket.on('error', e => {
-  //   socket.setTimeout(1000, () => {
-  //     socket.connect(PORT, targetIp);
-  //   });
-  //   console.log('retry');
-  // });
-
-  // if (!ON_SUB) {
-  //   socket.connect(PORT, targetIp, () =>
-  //     console.log('connected to ', targetIp),
-  //   );
-  // }
+export default async (
+  port: number,
+  target: string,
+  action: ActionType,
+  ...options: any
+) => {
+  const topic = options[1];
+  const msg = options[2];
 
   console.log('resting param', options);
 
-  switch (s) {
+  const alreadySocket = brokerSubsrcibe.exist(target);
+  switch (action) {
     case 'publish':
-      // socket.connect(PORT, targetIp, () => {
-      console.log('connected to ', targetIp);
+      // check target is already subsrcibe before sending topic/msg
+      const socket =
+        (brokerSubsrcibe.getByIp(target) &&
+          brokerSubsrcibe.getByIp(target).s) ||
+        (await connectToBroker(port, target));
+
+      console.log('connected to ', target);
       console.log('establish connection');
-      socket.write('write ja');
-      socket.end();
-      // socket.end(() => console.log('closed connection'));
-      // });
+      socket.write(topic + ' ' + msg);
+      if (!alreadySocket) {
+        console.log('close connection');
+        return socket.end();
+      }
 
       return;
     case 'subscribe':
+      if (!alreadySocket) {
+        const socket = await connectToBroker(port, target);
+        brokerSubsrcibe.addSub(target, socket);
+        console.log('add new socket');
+      }
+      console.log('already socket', alreadySocket);
       console.log('subscribe action');
       return;
 

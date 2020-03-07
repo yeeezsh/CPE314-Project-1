@@ -1,5 +1,5 @@
-import net = require('net');
-import os = require('os');
+import * as net from 'net';
+import * as os from 'os';
 
 import readline = require('readline');
 import cmdParser from './cmd.parser';
@@ -27,13 +27,17 @@ const rl = readline.createInterface({
 const mainCmd = (cb?: (s: any) => void) => {
   rl.question('\nclient > ', line => {
     const { action, options } = cmdParser(line);
-
     const target = options[0];
-    const client = net.connect(PORT, target).on('connect', () => {
-      cmdAction(client, action, ...options);
+
+    cmdAction(PORT, target, action, ...options).then(() => {
       rl.emit('line');
       return cb && cb(line);
     });
+    // const client = net.connect(PORT, target).on('connect', () => {
+    //   cmdAction(client, action, ...options);
+    //   rl.emit('line');
+    //   return cb && cb(line);
+    // });
   });
 };
 
