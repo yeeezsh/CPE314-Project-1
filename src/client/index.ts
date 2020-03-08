@@ -28,7 +28,7 @@ export const rl = readline.createInterface({
 });
 
 export const input = new Line();
-const socketBroker = new SocketBroker();
+export const socketBroker = new SocketBroker();
 
 input.onLine(async () => {
   const line = await input.question();
