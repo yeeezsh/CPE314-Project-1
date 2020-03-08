@@ -18,7 +18,7 @@ export default class Subscriber {
           socket.write(topic + ' ' + msg);
         } else {
           console.warn(
-            '[WARN] Adress: ',
+            '[WARN] Address: ',
             socket.remoteAddress,
             ':',
             socket.remotePort,
