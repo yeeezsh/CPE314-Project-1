@@ -8,6 +8,10 @@ export default class Subscriber {
       topic,
       socket,
     });
+    /* for safety */
+    socket.on('close', () => {
+      Subscriber.remove(socket);
+    });
   }
 
   static publish(topic: string, msg: string) {
