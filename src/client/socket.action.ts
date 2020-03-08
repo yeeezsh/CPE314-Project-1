@@ -27,14 +27,7 @@ export default async (
     case 'publish':
       socket.write(action + ' ' + topic + ' ' + msg);
       console.log(
-        '[PUB] Target : ',
-        target,
-        ' | ',
-        'Topic ',
-        topic,
-        ' | ',
-        'Message ',
-        msg,
+        `[PUB] Target: ${target} | Topic: ${topic} | Message: ${msg}`,
       );
 
       // do not close connection if same socket as subscribe
@@ -49,8 +42,7 @@ export default async (
         socketBroker.addSub(target, socket);
         socketBroker.getSubscribeList();
       }
-
-      console.log('[SUB] Target : ', target, ' | ', 'Topic ', topic, ' | ');
+      console.log(`[SUB] Target: ${target} | Topic: ${topic}`);
       socket.write(action + ' ' + topic + ' ' + msg);
       return;
 
