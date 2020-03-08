@@ -1,4 +1,3 @@
-console.log('Broker server starting...', '\n');
 import * as net from 'net';
 import * as os from 'os';
 import { Parser } from './parser';
@@ -22,6 +21,7 @@ const addresses = Object.keys(networkInterfaces)
 const server = net.createServer();
 server.maxConnections = MAX_CONN;
 
+console.log('Broker server starting...', '\n');
 server.listen(PORT, HOST, () => {
   console.log('Broker Address');
   console.log('Hostname:', os.hostname());

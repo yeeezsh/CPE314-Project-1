@@ -15,7 +15,7 @@ export class SocketBroker {
   }
 
   async connect(port: number, target: string): Promise<net.Socket> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const socket = net.connect(port, target);
       socket.setTimeout(TIME_OUT);
 
