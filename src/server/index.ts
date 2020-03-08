@@ -43,6 +43,7 @@ server.on('connection', socket => {
     socket.remotePort,
   );
 
+  // data from remote
   socket.on('data', data => {
     console.log(
       `[CONN] incomming data from ${socket.remoteAddress}:`,
@@ -53,19 +54,20 @@ server.on('connection', socket => {
     /* quick handle */
     const topic = parsed.getTopic();
     const msg = parsed.getMessage();
-    switch (parsed.getAction()) {
+    const action = parsed.getAction();
+    switch (action) {
       case 'publish':
         Subscriber.publish(topic, msg);
         console.log(`[PUB] from ${socket.remoteAddress}:`, socket.remotePort);
         console.log(`Topic: ${topic} | Msg: ${msg}`);
         break;
       case 'subscribe':
-        new Subscriber(parsed.getTopic(), socket);
+        new Subscriber(topic, socket);
         console.log(`[SUB] from ${socket.remoteAddress}:`, socket.remotePort);
         console.log(`Topic: ${topic}`);
         break;
       default:
-        console.error('[ERR] unrecognized action:', parsed.getAction());
+        console.error('[ERR] unrecognized action:', action);
     }
   });
 

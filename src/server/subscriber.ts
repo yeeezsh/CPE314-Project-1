@@ -18,10 +18,11 @@ export default class Subscriber {
           socket.write(topic + ' ' + msg);
         } else {
           console.warn(
-            '[WARN] Adress :',
+            '[WARN] Adress: ',
             socket.remoteAddress,
-            `(${socket.remotePort})`,
-            'has alread destroyed',
+            ':',
+            socket.remotePort,
+            'has already destroyed',
           );
           console.log('[CONN] removing destroyed socket');
           this.remove(socket);
