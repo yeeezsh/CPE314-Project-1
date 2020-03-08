@@ -2,8 +2,6 @@
 import { Parser } from './parser';
 import { SocketBroker } from './socket.broker';
 
-const ON_SUB = false;
-const MAX_RETRY = 3;
 export type ActionType = 'publish' | 'subscribe' | string;
 const COMMAND_LIST = ['publish', 'subscribe'];
 

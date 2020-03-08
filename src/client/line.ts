@@ -22,7 +22,7 @@ export class Line {
 
   question(): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.line.question('\n client >', line => {
+      this.line.question('\nclient >', line => {
         resolve(line);
         this.line.emit('line');
         return;
