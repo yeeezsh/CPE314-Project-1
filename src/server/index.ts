@@ -4,12 +4,14 @@ import net = require('net');
 const PORT = 5000;
 const HOST = '0.0.0.0';
 
+// welcome socket
 const server = net.createServer();
 
 server.listen(PORT, HOST, () =>
   console.log('server start at ', server.address()),
 );
 
+// welcome event
 server.on('connection', socket => {
   server.getConnections((err, n) => {
     console.log('number of connection', n);

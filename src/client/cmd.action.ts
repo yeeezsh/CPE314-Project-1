@@ -27,7 +27,7 @@ export default async (
     case 'publish':
       console.log('connected to ', target);
       console.log('establish connection');
-      socket.write(topic + ' ' + msg);
+      socket.write(action + ' ' + topic + ' ' + msg);
       if (!alreadySocket) {
         console.log('close connection');
         return socket.end();
@@ -39,10 +39,10 @@ export default async (
         brokerSubsrcibe.addSub(target, socket);
         console.log('add new presist socket');
       }
-      socket.write(topic + ' ' + msg);
-      socket.on('data', d => {
-        console.log(d);
-      });
+      socket.write(action + ' ' + topic + ' ' + msg);
+      // socket.on('data', d => {
+      //   console.log(d);
+      // });
       console.log('subscribe action');
       return;
 
