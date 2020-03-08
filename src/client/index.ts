@@ -20,12 +20,7 @@ console.log('Hostname:', os.hostname());
 console.log('Local IP:', addresses, '\n');
 
 export const PORT = 5000;
-
-export const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: false,
-});
+export const TIME_OUT = 3000;
 
 export const input = new Line();
 export const socketBroker = new SocketBroker();

@@ -1,9 +1,7 @@
 import * as net from 'net';
-import { input } from '.';
+import { input, TIME_OUT } from '.';
 import { Parser } from './parser';
 import { socketBroker } from './index';
-
-const TIME_OUT = 3000;
 
 export interface SubSocket {
   ip: string;
@@ -19,7 +17,6 @@ export class SocketBroker {
   async connect(port: number, target: string): Promise<net.Socket> {
     return new Promise((resolve, reject) => {
       const socket = net.connect(port, target);
-      const connectingState = socket.connecting;
       socket.setTimeout(TIME_OUT);
 
       socket.on('connect', () => {
@@ -66,7 +63,7 @@ export class SocketBroker {
   }
 
   getSubscribeList() {
-    console.log('[SUB] number of connection ', this.list.length);
+    console.log('[SUB] Number of connection ', this.list.length);
     this.list.forEach(e => console.log('[SUB] Address', e.ip));
   }
 
