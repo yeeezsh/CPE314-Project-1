@@ -21,13 +21,19 @@ export class SocketBroker {
         console.log('[CONN] establish connection');
         resolve(socket);
       });
+
       socket.on('data', data => {
-        console.log('\n', '[MSG] ', data.toString());
+        const { msg, topic } = Parser.parseMessage(data.toString());
+        console.log('\n[MSG] Topic : ', topic, ' > ', msg);
         input.initLine();
       });
+
       socket.on('error', err => {
         console.error(err);
         reject(err);
+      });
+      socket.on('timeout', () => {
+        console.log('[CONN] connection timeout');
       });
       socket.on('close', err => {
         console.log('[CONN] close connection');
@@ -54,6 +60,8 @@ export class SocketBroker {
     if (ips.includes(ip)) return true;
     return false;
   }
+
+  removeSub(s: net.Socket) {}
 }
 
 // export const brokerSubsrcibe = new BrokerSubsrcibe();

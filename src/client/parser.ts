@@ -22,4 +22,12 @@ export class Parser {
     const msg = options[2];
     return { topic, msg };
   }
+
+  static parseMessage(msg: string): { topic: string; msg: string } {
+    const splited = msg.split(' ');
+    return {
+      topic: splited[0],
+      msg: splited[1],
+    };
+  }
 }
