@@ -1,7 +1,7 @@
 console.log('Broker server starting...', '\n');
 import * as net from 'net';
 import * as os from 'os';
-import { SocketData } from './data.parser';
+import { Parser } from './parser';
 import Subscriber from './subscriber';
 
 const PORT = 5000;
@@ -49,9 +49,9 @@ server.on('connection', socket => {
       `[CONN] incomming data from ${socket.remoteAddress}:`,
       socket.remotePort,
     );
-    const parsed = new SocketData(data.toString());
+    const parsed = new Parser(data.toString());
 
-    /* quick handle */
+    // parsed data from remote
     const topic = parsed.getTopic();
     const msg = parsed.getMessage();
     const action = parsed.getAction();
@@ -71,6 +71,7 @@ server.on('connection', socket => {
     }
   });
 
+  // on remote send close
   socket.on('close', () => {
     console.log(
       `[CONN] disconnected from ${socket.remoteAddress}:`,
@@ -85,5 +86,4 @@ server.on('connection', socket => {
     });
     Subscriber.remove(socket);
   });
-  // console.log('on connection', socket.on('connect'))
 });
