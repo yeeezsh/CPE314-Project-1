@@ -18,16 +18,26 @@ export class Parser {
     topic: string;
     msg: string;
   } {
-    const topic = options[1];
-    const msg = options[2];
+    const parsed = /(['’]\S+['’])\s*(['’](.+)['’])?/.exec(options.join(' '));
+    if (!parsed) {
+      console.error('\r[ERR]', 'Unable to parse topic or message');
+      return { topic: '', msg: '' };
+    }
+    const topic = parsed[1];
+    const msg = parsed[2];
     return { topic, msg };
   }
 
   static parseMessage(msg: string): { topic: string; msg: string } {
-    const splited = msg.split(' ');
-    return {
-      topic: splited[0],
-      msg: splited[1],
-    };
+    const parsed = /(['’]\S+['’])\s*(['’](.+)['’])?/.exec(msg);
+    return parsed
+      ? {
+          topic: parsed[1],
+          msg: parsed[2].trim(),
+        }
+      : {
+          topic: '[ERR]',
+          msg: msg,
+        };
   }
 }
