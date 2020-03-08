@@ -17,11 +17,12 @@ export default async (
 
   // check target is already subsrcibe before sending topic/msg
   const alreadySocket = socketBroker.exist(target);
+
   // establish conn w/ check if socket is already exist use in list instead
   const socket = alreadySocket
     ? socketBroker.getByTarget(target).s
     : await socketBroker.connect(port, target);
-  console.log('already socket', alreadySocket);
+
   switch (action) {
     case 'publish':
       socket.write(action + ' ' + topic + ' ' + msg);
@@ -35,13 +36,15 @@ export default async (
         'Message ',
         msg,
       );
+
+      // do not close connection if same socket as subscribe
       if (!alreadySocket) {
         socket.end();
         return;
       }
-
       return;
     case 'subscribe':
+      // if connection not created yet create and add to socket list
       if (!alreadySocket) {
         socketBroker.addSub(target, socket);
         socketBroker.getSubscribeList();
