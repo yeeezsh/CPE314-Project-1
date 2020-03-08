@@ -7,6 +7,9 @@ export const connectToBroker = async (
   new Promise((resolve, reject) => {
     const socket = net.connect(port, target);
     socket.on('connect', () => resolve(socket));
+    socket.on('data', data => {
+      console.log('test data', data.toString());
+    });
     socket.on('error', () => reject());
   });
 
