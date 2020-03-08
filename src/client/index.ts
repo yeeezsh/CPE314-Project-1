@@ -4,6 +4,7 @@ import * as os from 'os';
 import readline = require('readline');
 import cmdAction from './cmd.action';
 import { Parser } from './parser';
+import { Line } from './line';
 
 const networkInterfaces = os.networkInterfaces();
 const addresses = Object.keys(networkInterfaces)
@@ -27,23 +28,40 @@ export const rl = readline.createInterface({
   terminal: false,
 });
 
-const mainCmd = (cb?: (s: any) => void) => {
-  rl.question('\nclient > ', line => {
-    const { action, options } = Parser.parse(line);
-    const target = options[0];
+const input = new Line();
 
-    cmdAction(PORT, target, action, ...options).then(() => {
-      rl.emit('line');
-      return cb && cb(line);
-    });
-    // const client = net.connect(PORT, target).on('connect', () => {
-    //   cmdAction(client, action, ...options);
-    //   rl.emit('line');
-    //   return cb && cb(line);
-    // });
-  });
-};
+// const mainCmd = async (cb?: (s: any) => void) => {
+//   const cmd = await input.question();
+//   console.log('cmdddsds', cmd);
+//   input.question().then(d => console.log(d));
+//   rl.question('\nclient > ', line => {
+//     const { action, options } = Parser.parse(line);
+//     const target = options[0];
+//     cmdAction(PORT, target, action, ...options).then(() => {
+//       rl.emit('line');
+//       return cb && cb(line);
+//     });
+//     // const client = net.connect(PORT, target).on('connect', () => {
+//     //   cmdAction(client, action, ...options);
+//     //   rl.emit('line');
+//     //   return cb && cb(line);
+//     // });
+//   });
+// };
 
-rl.on('line', () => mainCmd());
+input.onLine(async () => {
+  const line = await input.question();
+  const { action, options } = Parser.parse(line);
+  const target = options[0];
+  await cmdAction(PORT, target, action, ...options);
+  // cmdAction(PORT, target, action, ...options).then(() => {
+  //   rl.emit('line');
+  //   return cb && cb(line);
+  // });
+});
 
-mainCmd();
+input.initLine();
+
+// rl.on('line', () => mainCmd());
+
+// mainCmd();
