@@ -27,7 +27,7 @@ export default async (
     case 'publish':
       socket.write(action + ' ' + topic + ' ' + msg);
       console.log(
-        '[MSG] Target : ',
+        '[PUB] Target : ',
         target,
         ' | ',
         'Topic ',

@@ -3,6 +3,8 @@ import { input } from '.';
 import { Parser } from './parser';
 import { socketBroker } from './index';
 
+const TIME_OUT = 3000;
+
 export interface SubSocket {
   ip: string;
   s: net.Socket;
@@ -17,25 +19,33 @@ export class SocketBroker {
   async connect(port: number, target: string): Promise<net.Socket> {
     return new Promise((resolve, reject) => {
       const socket = net.connect(port, target);
+      const connectingState = socket.connecting;
+      socket.setTimeout(TIME_OUT);
+
       socket.on('connect', () => {
+        clearInterval(connecting);
+        socket.setTimeout(0);
         console.log('[CONN] connected to ', target);
         console.log('[CONN] establish connection');
         resolve(socket);
       });
 
       socket.on('data', data => {
+        clearInterval(connecting);
         const { msg, topic } = Parser.parseMessage(data.toString());
         console.log('\n[MSG] Topic : ', topic, ' > ', msg);
         input.initLine();
       });
 
       socket.on('error', err => {
+        clearInterval(connecting);
         console.log('\n');
         console.error('[ERR] ', err);
         socketBroker.removeSub(socket);
         input.initLine();
       });
       socket.on('timeout', () => {
+        clearInterval(connecting);
         console.log('\n');
         console.log('[CONN] connection timeout');
         socketBroker.removeSub(socket);
@@ -49,6 +59,10 @@ export class SocketBroker {
         socketBroker.getSubscribeList();
         input.initLine();
       });
+
+      const connecting = setInterval(() => {
+        console.log('[CONN] connecting to ', target);
+      }, 500);
     });
   }
 
@@ -75,6 +89,7 @@ export class SocketBroker {
 
   removeSub(s: net.Socket) {
     const fileterd = this.list.filter(f => f.s !== s);
+    s.destroy();
     this.list = fileterd;
   }
 }
