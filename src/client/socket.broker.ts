@@ -25,7 +25,7 @@ export class SocketBroker {
       socket.on('connect', () => {
         clearInterval(connecting);
         socket.setTimeout(0);
-        console.log('[CONN] connected to ', target);
+        console.log('\r[CONN] connected to ', target);
         console.log('[CONN] establish connection');
         resolve(socket);
       });
@@ -52,8 +52,7 @@ export class SocketBroker {
         input.initLine();
       });
       socket.on('close', () => {
-        console.log('\n');
-        console.log('[CONN] close connection');
+        console.log('\r[CONN] close connection');
         console.log('[SUB] removing sub connection');
         socketBroker.removeSub(socket);
         socketBroker.getSubscribeList();
