@@ -19,19 +19,42 @@ export const connectToBroker = async (
     });
   });
 
-interface SubSocket {
+export interface SubSocket {
   ip: string;
   s: net.Socket;
+  topic: string;
 }
 type SocketList = SubSocket[];
-class BrokerSubsrcibe {
+export class SocketBroker {
   list: SocketList;
   constructor() {
     this.list = [];
   }
 
-  addSub(ip: string, s: net.Socket) {
-    this.list.push({ ip, s });
+  async connect(port: number, target: string): Promise<net.Socket> {
+    return new Promise((resolve, reject) => {
+      const socket = net.connect(port, target);
+      socket.on('connect', () => resolve(socket));
+      socket.on('data', data => {
+        console.log('data: ', data.toString());
+        rl.emit('line');
+      });
+      socket.on('error', err => reject(err));
+      socket.on('close', err => {
+        // socket.connect(port, target);
+        console.log('[DEBUG] connection closed');
+      });
+    });
+  }
+
+  getSubscribeList() {
+    this.list.forEach(e =>
+      console.log('[SUB] Address', e.ip, ' | ', 'Topic', e.topic),
+    );
+  }
+
+  addSub(ip: string, s: net.Socket, topic: string) {
+    this.list.push({ ip, s, topic });
     return;
   }
 
@@ -46,4 +69,4 @@ class BrokerSubsrcibe {
   }
 }
 
-export const brokerSubsrcibe = new BrokerSubsrcibe();
+// export const brokerSubsrcibe = new BrokerSubsrcibe();
