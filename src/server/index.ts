@@ -1,4 +1,3 @@
-console.log('Broker server starting...', '\n');
 import * as net from 'net';
 import * as os from 'os';
 import { Parser } from './parser';
@@ -22,6 +21,7 @@ const addresses = Object.keys(networkInterfaces)
 const server = net.createServer();
 server.maxConnections = MAX_CONN;
 
+console.log('Broker server starting...', '\n');
 server.listen(PORT, HOST, () => {
   console.log('Broker Address');
   console.log('Hostname:', os.hostname());
@@ -34,7 +34,7 @@ server.listen(PORT, HOST, () => {
 server.on('connection', socket => {
   // show number of total connection
   server.getConnections((err, n) => {
-    console.log('[CONN] number of connection', n, '/', server.maxConnections);
+    console.log('[CONN] Number of connection', n, '/', server.maxConnections);
     if (err) console.error('[ERR]', err);
   });
 
@@ -87,7 +87,7 @@ server.on('connection', socket => {
       if (err) {
         console.log('[ERR] ', err);
       }
-      console.log('[CONN] number of connection', n, '/', server.maxConnections);
+      console.log('[CONN] Number of connection', n, '/', server.maxConnections);
     });
     Subscriber.remove(socket);
   });
