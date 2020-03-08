@@ -6,4 +6,16 @@ export class Parser {
     const action = splited[0];
     return { action, options: splited.slice(1) };
   }
+
+  static parseOption(
+    options: string[],
+  ): {
+    topic: string;
+    msg: string;
+  } {
+    console.log('kskldkslds', options);
+    const topic = options[1];
+    const msg = options[2];
+    return { topic, msg };
+  }
 }

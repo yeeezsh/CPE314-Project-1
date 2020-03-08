@@ -1,5 +1,5 @@
-import * as net from 'net';
 import { connectToBroker, brokerSubsrcibe } from './socket.utility';
+import { Parser } from './parser';
 
 const ON_SUB = false;
 const MAX_RETRY = 3;
@@ -8,16 +8,12 @@ export default async (
   port: number,
   target: string,
   action: ActionType,
-  ...options: any
+  ...options: string[]
 ) => {
-  const topic = options[1];
-  const msg = options[2];
-
-  console.log('resting param', options);
+  const { topic, msg } = Parser.parseOption(options);
 
   // check target is already subsrcibe before sending topic/msg
   const alreadySocket = brokerSubsrcibe.exist(target);
-  // console.log('already exist', alreadySocket);
 
   // establish conn w/ check if socket is already exist use in list instead
   const socket =
@@ -25,11 +21,11 @@ export default async (
     (await connectToBroker(port, target));
   switch (action) {
     case 'publish':
-      console.log('connected to ', target);
-      console.log('establish connection');
+      console.log('[CONN] connected to ', target);
+      console.log('[CONN] establish connection');
       socket.write(action + ' ' + topic + ' ' + msg);
       if (!alreadySocket) {
-        console.log('close connection');
+        console.log('[CONN] close connection');
         return socket.end();
       }
 
