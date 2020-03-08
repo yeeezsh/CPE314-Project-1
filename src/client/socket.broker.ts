@@ -30,7 +30,7 @@ export class SocketBroker {
       socket.on('data', data => {
         clearInterval(connecting);
         const { msg, topic } = Parser.parseMessage(data.toString());
-        console.log('\n[MSG] Topic : ', topic, ' > ', msg);
+        console.log('\r[MSG] Topic : ', topic, ' > ', msg);
         input.initLine();
       });
 

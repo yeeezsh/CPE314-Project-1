@@ -12,7 +12,6 @@ export class Parser {
       this.msg = parsed[4];
     } catch (err) {
       console.error('[ERR] Unable to parse socket data');
-      console.error(err);
     }
   }
 
@@ -27,5 +26,9 @@ export class Parser {
 
   getMessage(): string {
     return this.msg;
+  }
+
+  isError(): boolean {
+    return !this.action;
   }
 }

@@ -51,6 +51,11 @@ server.on('connection', socket => {
     );
     const parsed = new Parser(data.toString());
 
+    if (parsed.isError()) {
+      socket.write("'[ERR]' 'Unable to parse socket data'");
+      return;
+    }
+
     // parsed data from remote
     const topic = parsed.getTopic();
     const msg = parsed.getMessage();
