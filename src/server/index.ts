@@ -23,11 +23,11 @@ const server = net.createServer();
 server.maxConnections = MAX_CONN;
 
 server.listen(PORT, HOST, () => {
-  console.log('Broker Adress');
+  console.log('Broker Address');
   console.log('Hostname:', os.hostname());
   console.log('Local IP:', addresses);
   console.log('Port:', PORT);
-  console.log('Maximun connection: ', server.maxConnections, '\n');
+  console.log('Maximum connection: ', server.maxConnections, '\n');
 });
 
 // after started broker
@@ -39,7 +39,7 @@ server.on('connection', socket => {
   });
 
   console.log(
-    `[CONN] inconmming from ${socket.remoteAddress}:`,
+    `[CONN] incomming from ${socket.remoteAddress}:`,
     socket.remotePort,
   );
 
