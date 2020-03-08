@@ -8,9 +8,13 @@ export const connectToBroker = async (
     const socket = net.connect(port, target);
     socket.on('connect', () => resolve(socket));
     socket.on('data', data => {
-      console.log('test data', data.toString());
+      console.log('data: ', data.toString());
     });
-    socket.on('error', () => reject());
+    socket.on('error', err => reject(err));
+    socket.on('close', err => {
+      // socket.connect(port, target);
+      console.log('[DEBUG] connection closed');
+    });
   });
 
 interface SubSocket {

@@ -39,10 +39,11 @@ export default async (
         brokerSubsrcibe.addSub(target, socket);
         console.log('add new presist socket');
       }
+
+      // socket.write(action + ' ' + topic);
       socket.write(action + ' ' + topic + ' ' + msg);
-      // socket.on('data', d => {
-      //   console.log(d);
-      // });
+
+      // console.log('already socket', alreadySocket);
       console.log('subscribe action');
       return;
 
