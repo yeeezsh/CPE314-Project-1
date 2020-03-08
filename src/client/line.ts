@@ -8,7 +8,6 @@ export class Line {
       output: process.stdout,
       terminal: false,
     });
-    // this.line.on('line', () => this.question());
   }
 
   onLine(cb: () => void) {
