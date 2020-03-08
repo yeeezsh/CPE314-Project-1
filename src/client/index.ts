@@ -2,8 +2,8 @@ import * as net from 'net';
 import * as os from 'os';
 
 import readline = require('readline');
-import cmdParser from './cmd.parser';
 import cmdAction from './cmd.action';
+import { Parser } from './parser';
 
 const networkInterfaces = os.networkInterfaces();
 const addresses = Object.keys(networkInterfaces)
@@ -29,7 +29,7 @@ const rl = readline.createInterface({
 
 const mainCmd = (cb?: (s: any) => void) => {
   rl.question('\nclient > ', line => {
-    const { action, options } = cmdParser(line);
+    const { action, options } = Parser.parse(line);
     const target = options[0];
 
     cmdAction(PORT, target, action, ...options).then(() => {
