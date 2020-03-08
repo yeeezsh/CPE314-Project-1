@@ -1,4 +1,5 @@
 import * as net from 'net';
+import { rl } from './';
 
 export const connectToBroker = async (
   port: number,
@@ -9,6 +10,7 @@ export const connectToBroker = async (
     socket.on('connect', () => resolve(socket));
     socket.on('data', data => {
       console.log('data: ', data.toString());
+      rl.emit('line');
     });
     socket.on('error', err => reject(err));
     socket.on('close', err => {

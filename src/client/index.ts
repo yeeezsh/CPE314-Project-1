@@ -21,7 +21,7 @@ console.log('Local IP :', addresses, '\n');
 const END_POINT = '127.0.0.1';
 export const PORT = 5000;
 
-const rl = readline.createInterface({
+export const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
   terminal: false,
