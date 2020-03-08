@@ -10,7 +10,8 @@ export class SocketData {
       this.topic = parsed[2];
       this.msg = parsed[4];
     } catch (err) {
-      console.error('Unable to parse socket data', err);
+      console.error('[ERR] Unable to parse socket data');
+      console.error(err);
     }
   }
 
