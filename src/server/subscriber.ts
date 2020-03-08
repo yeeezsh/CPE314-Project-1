@@ -31,6 +31,7 @@ export default class Subscriber {
 
   static remove(s: net.Socket) {
     this.clients = this.clients.filter(f => f.socket !== s);
+    s.destroy();
     return;
   }
 }
