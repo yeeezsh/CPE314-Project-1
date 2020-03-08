@@ -13,6 +13,6 @@ export default class Subscriber {
   static publish(topic: string, msg: string) {
     Subscriber.clients
       .filter(client => client.topic === topic)
-      .forEach(({ socket }) => socket.write(msg));
+      .forEach(({ socket }) => socket.write(topic + ' ' + msg));
   }
 }
