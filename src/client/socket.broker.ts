@@ -1,6 +1,7 @@
 import * as net from 'net';
 import { input } from '.';
 import { Parser } from './parser';
+import { socketBroker } from './index';
 
 export interface SubSocket {
   ip: string;
@@ -29,19 +30,30 @@ export class SocketBroker {
       });
 
       socket.on('error', err => {
-        console.error(err);
-        reject(err);
+        console.log('\n');
+        console.error('[ERR] ', err);
+        socketBroker.removeSub(socket);
+        input.initLine();
       });
       socket.on('timeout', () => {
+        console.log('\n');
         console.log('[CONN] connection timeout');
+        socketBroker.removeSub(socket);
+        input.initLine();
       });
-      socket.on('close', err => {
+      socket.on('close', () => {
+        console.log('\n');
         console.log('[CONN] close connection');
+        console.log('[SUB] removing sub connection');
+        socketBroker.removeSub(socket);
+        socketBroker.getSubscribeList();
+        input.initLine();
       });
     });
   }
 
   getSubscribeList() {
+    console.log('[SUB] number of connection ', this.list.length);
     this.list.forEach(e => console.log('[SUB] Address', e.ip));
   }
 
@@ -61,7 +73,8 @@ export class SocketBroker {
     return false;
   }
 
-  removeSub(s: net.Socket) {}
+  removeSub(s: net.Socket) {
+    const fileterd = this.list.filter(f => f.s !== s);
+    this.list = fileterd;
+  }
 }
-
-// export const brokerSubsrcibe = new BrokerSubsrcibe();
