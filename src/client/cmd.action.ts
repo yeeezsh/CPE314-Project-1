@@ -18,6 +18,8 @@ export default async (
   // check target is already subsrcibe before sending topic/msg
   const alreadySocket = brokerSubsrcibe.exist(target);
   // console.log('already exist', alreadySocket);
+
+  // establish conn w/ check if socket is already exist use in list instead
   const socket =
     (brokerSubsrcibe.getByIp(target) && brokerSubsrcibe.getByIp(target).s) ||
     (await connectToBroker(port, target));
@@ -35,10 +37,11 @@ export default async (
     case 'subscribe':
       if (!alreadySocket) {
         brokerSubsrcibe.addSub(target, socket);
-        console.log('add new socket');
+        console.log('add new presist socket');
       }
 
-      socket.write(action + ' ' + topic);
+      // socket.write(action + ' ' + topic);
+      socket.write(action + ' ' + topic + ' ' + msg);
 
       // console.log('already socket', alreadySocket);
       console.log('subscribe action');
