@@ -6,6 +6,7 @@ import Subscriber from './subscriber';
 
 const PORT = 5000;
 const HOST = '0.0.0.0';
+const MAX_CONN = 1000;
 
 const networkInterfaces = os.networkInterfaces();
 const addresses = Object.keys(networkInterfaces)
@@ -18,20 +19,23 @@ const addresses = Object.keys(networkInterfaces)
   .map(({ address }) => address)
   .join(', ');
 
-// welcome socket
 const server = net.createServer();
+server.maxConnections = MAX_CONN;
 
 server.listen(PORT, HOST, () => {
   console.log('Broker Adress');
-  console.log('Hostname :', os.hostname());
-  console.log('Local IP :', addresses);
-  console.log('Port :', PORT, '\n');
+  console.log('Hostname:', os.hostname());
+  console.log('Local IP:', addresses);
+  console.log('Port:', PORT);
+  console.log('Maximun connection: ', server.maxConnections, '\n');
 });
 
-// welcome event
+// after started broker
 server.on('connection', socket => {
+  // show number of total connection
   server.getConnections((err, n) => {
-    console.log('[CONN] number of connection', n);
+    console.log('[CONN] number of connection', n, '/', server.maxConnections);
+    if (err) console.error('[ERR]', err);
   });
 
   console.log(
@@ -75,7 +79,7 @@ server.on('connection', socket => {
       if (err) {
         console.log('[ERR] ', err);
       }
-      console.log('[CONN] number of connection', n);
+      console.log('[CONN] number of connection', n, '/', server.maxConnections);
     });
     Subscriber.remove(socket);
   });

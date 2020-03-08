@@ -16,8 +16,8 @@ const addresses = Object.keys(networkInterfaces)
   .filter(el => el)
   .map(({ address }) => address)
   .join(', ');
-console.log('Hostname :', os.hostname());
-console.log('Local IP :', addresses, '\n');
+console.log('Hostname:', os.hostname());
+console.log('Local IP:', addresses, '\n');
 
 export const PORT = 5000;
 
