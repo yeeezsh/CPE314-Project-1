@@ -1,10 +1,10 @@
 import * as os from 'os';
+import * as readline from 'readline';
 
-import readline = require('readline');
-import cmdAction from './cmd.action';
+import socketAction from './socket.action';
 import { Parser } from './parser';
 import { Line } from './line';
-import { SocketBroker } from './socket.utility';
+import { SocketBroker } from './socket.broker';
 
 const networkInterfaces = os.networkInterfaces();
 const addresses = Object.keys(networkInterfaces)
@@ -27,13 +27,14 @@ export const rl = readline.createInterface({
   terminal: false,
 });
 
-const input = new Line();
+export const input = new Line();
 const socketBroker = new SocketBroker();
 
 input.onLine(async () => {
   const line = await input.question();
   const { action, options, target } = Parser.parse(line);
-  await cmdAction(PORT, target, action, socketBroker, ...options);
+  await socketAction(PORT, target, action, socketBroker, ...options);
+  input.initLine();
 });
 
 input.initLine();
