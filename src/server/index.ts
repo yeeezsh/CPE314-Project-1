@@ -30,6 +30,7 @@ server.listen(PORT, HOST, () => {
   console.log('Maximum connection: ', server.maxConnections, '\n');
 });
 
+const subscriber = new Subscriber();
 // after started broker
 server.on('connection', socket => {
   // show number of total connection
@@ -62,12 +63,12 @@ server.on('connection', socket => {
     const action = parsed.getAction();
     switch (action) {
       case 'publish':
-        Subscriber.publish(topic, msg);
+        subscriber.publish(topic, msg);
         console.log(`[PUB] from ${socket.remoteAddress}:`, socket.remotePort);
         console.log(`Topic: ${topic} | Msg: ${msg}`);
         break;
       case 'subscribe':
-        new Subscriber(topic, socket);
+        subscriber.subscribe(topic, socket);
         console.log(`[SUB] from ${socket.remoteAddress}:`, socket.remotePort);
         console.log(`Topic: ${topic}`);
         break;
@@ -89,6 +90,6 @@ server.on('connection', socket => {
       }
       console.log('[CONN] Number of connection', n, '/', server.maxConnections);
     });
-    Subscriber.remove(socket);
+    subscriber.remove(socket);
   });
 });

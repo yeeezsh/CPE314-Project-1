@@ -1,21 +1,21 @@
 import * as net from 'net';
 
 export default class Subscriber {
-  static clients: Array<{ topic: string; socket: net.Socket }> = [];
+  clients: Array<{ topic: string; socket: net.Socket }> = [];
 
-  constructor(topic: string, socket: net.Socket) {
-    Subscriber.clients.push({
-      topic,
-      socket,
-    });
-    /* for safety */
+  constructor() {
+    this.clients = [];
+  }
+
+  subscribe(topic: string, socket: net.Socket) {
+    this.clients.push({ topic, socket: socket });
     socket.on('close', () => {
-      Subscriber.remove(socket);
+      this.remove(socket);
     });
   }
 
-  static publish(topic: string, msg: string) {
-    Subscriber.clients
+  publish(topic: string, msg: string) {
+    this.clients
       .filter(client => client.topic === topic)
       .forEach(({ socket }) => {
         if (!socket.destroyed) {
@@ -34,7 +34,7 @@ export default class Subscriber {
       });
   }
 
-  static remove(s: net.Socket) {
+  remove(s: net.Socket) {
     this.clients = this.clients.filter(f => f.socket !== s);
     s.destroy();
     return;
