@@ -33,7 +33,7 @@ export class Parser {
     return parsed
       ? {
           topic: parsed[1],
-          msg: parsed[2].trim(),
+          msg: parsed[2],
         }
       : {
           topic: '[ERR]',

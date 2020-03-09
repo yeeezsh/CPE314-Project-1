@@ -43,6 +43,7 @@ export default async (
       }
       console.log(`[SUB] Target: ${target} | Topic: ${topic}`);
       socket.write(action + ' ' + topic + ' ' + msg);
+
       return;
 
     default:

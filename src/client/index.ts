@@ -1,5 +1,4 @@
 import * as os from 'os';
-import * as readline from 'readline';
 
 import socketAction from './socket.action';
 import { Parser } from './parser';
@@ -13,7 +12,7 @@ const addresses = Object.keys(networkInterfaces)
       ({ family, internal }) => !internal && family === 'IPv4',
     ),
   )
-  .filter(el => el)
+  .filter(el => el) // for safety
   .map(({ address }) => address)
   .join(', ');
 console.log('Hostname:', os.hostname());

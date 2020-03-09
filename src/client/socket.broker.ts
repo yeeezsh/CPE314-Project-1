@@ -8,6 +8,7 @@ export interface SubSocket {
   s: net.Socket;
 }
 type SocketList = SubSocket[];
+
 export class SocketBroker {
   list: SocketList;
   constructor() {
@@ -28,7 +29,7 @@ export class SocketBroker {
       });
 
       socket.on('data', data => {
-        clearInterval(connecting);
+        // clearInterval(connecting);
         const { msg, topic } = Parser.parseMessage(data.toString());
         console.log('\r[MSG] Topic : ', topic, ' > ', msg);
         input.initLine();

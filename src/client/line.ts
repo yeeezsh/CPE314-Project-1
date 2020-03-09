@@ -21,7 +21,7 @@ export class Line {
   }
 
   question(): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.line.question('\nclient > ', line => {
         resolve(line);
         this.line.emit('line');
