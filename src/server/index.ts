@@ -91,4 +91,5 @@ server.on('connection', socket => {
     });
     Subscriber.remove(socket);
   });
+  socket.on('error', () => {});
 });

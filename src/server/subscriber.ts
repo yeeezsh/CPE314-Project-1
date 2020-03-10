@@ -19,7 +19,7 @@ export default class Subscriber {
       .filter(client => client.topic === topic)
       .forEach(({ socket }) => {
         if (!socket.destroyed) {
-          socket.write(topic + ' ' + msg);
+          socket.write(`'${topic}' '${msg}'`);
         } else {
           console.warn(
             '[WARN] Address: ',
