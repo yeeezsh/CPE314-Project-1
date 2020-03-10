@@ -92,4 +92,5 @@ server.on('connection', socket => {
     });
     subscriber.remove(socket);
   });
+  socket.on('error', () => {});
 });
